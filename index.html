@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Influencer Manager | Login</title>
+  <link rel="stylesheet" href="login.css" />
+  <style>
+    .loading {
+      display: none;
+      margin-top: 15px;
+      color: #007bff;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    input, select, button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <h1>AI Influencer Manager</h1>
+      <form onsubmit="return login(event)">
+        <input type="text" id="email" placeholder="Email" />
+        <input type="password" id="password" placeholder="Password " />
+        <select id="role" required>
+          <option value="" disabled selected>Select Role</option>
+          <option value="influencer">Influencer</option>
+          <option value="agency">Agency</option>
+        </select>
+        <button type="submit" id="loginBtn" disabled>Login</button>
+        <p class="loading" id="loading-msg">🔄 Redirecting to your dashboard...</p>
+        <p id="error-msg" style="color: #ff5e5e; margin-top: 10px;"></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const roleSelect = document.getElementById("role");
+    const loginBtn = document.getElementById("loginBtn");
+    const loadingMsg = document.getElementById("loading-msg");
+    const errorMsg = document.getElementById("error-msg");
+
+    // Enable login button when a role is selected
+    roleSelect.addEventListener("change", () => {
+      loginBtn.disabled = !roleSelect.value;
+    });
+
+    // Load saved role from localStorage
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedRole = localStorage.getItem("selectedRole");
+      if (savedRole) {
+        roleSelect.value = savedRole;
+        loginBtn.disabled = false;
+      }
+    });
+
+    function login(event) {
+      event.preventDefault();
+      const role = roleSelect.value;
+
+      if (!role) {
+        errorMsg.textContent = "Please select a role before logging in.";
+        return;
+      }
+
+      // Save role
+      localStorage.setItem("selectedRole", role);
+
+      // Show loading
+      loadingMsg.style.display = "block";
+      errorMsg.textContent = "";
+
+      // Fake loading delay then redirect
+      setTimeout(() => {
+        window.location.href = `${role}-dashboard.html`;
+      }, 1200);
+    }
+  </script>
+</body>
+</html>
