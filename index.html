@@ -1,93 +1,915 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Influencer Manager | Login</title>
-  <link rel="stylesheet" href="login.css" />
-  <style>
-    .loading {
-      display: none;
-      margin-top: 15px;
-      color: #007bff;
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-
-    input, select, button {
-      margin-top: 10px;
-      padding: 10px;
-      width: 100%;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REDEPLO- AI - Talent Redeployment Platform</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9fafb;
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background-color: var(--gray-900);
+            color: white;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-links a {
+            color: var(--gray-300);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .nav-links a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .nav-links a i {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--gray-900);
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card.blue h3 {
+            color: var(--primary);
+        }
+        
+        .stat-card.green h3 {
+            color: var(--secondary);
+        }
+        
+        .stat-card.red h3 {
+            color: var(--danger);
+        }
+        
+        .stat-card.orange h3 {
+            color: var(--warning);
+        }
+        
+        .stat-card p {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+        
+        .heat-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .heat-map-cell {
+            height: 80px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .heat-map-cell:hover {
+            transform: scale(1.05);
+        }
+        
+        .high-risk {
+            background-color: var(--danger);
+        }
+        
+        .medium-risk {
+            background-color: var(--warning);
+        }
+        
+        .low-risk {
+            background-color: var(--secondary);
+        }
+        
+        .no-risk {
+            background-color: var(--gray-300);
+            color: var(--gray-700);
+        }
+        
+        .employee-list {
+            list-style: none;
+        }
+        
+        .employee-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .employee-item:last-child {
+            border-bottom: none;
+        }
+        
+        .employee-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .employee-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--gray-700);
+        }
+        
+        .employee-details h4 {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .employee-details p {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+        
+        .employee-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--gray-100);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .risk-high {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .risk-medium {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .risk-low {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .job-matches {
+            margin-top: 1rem;
+        }
+        
+        .job-match-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .job-match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .job-match-title {
+            font-weight: bold;
+            color: var(--gray-900);
+        }
+        
+        .match-score {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        
+        .skill-gap-section {
+            margin-top: 1rem;
+        }
+        
+        .skill-gap {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .skill-name {
+            flex: 1;
+            font-size: 0.875rem;
+        }
+        
+        .skill-progress {
+            flex: 2;
+            height: 8px;
+            background-color: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .skill-progress-bar {
+            height: 100%;
+            background-color: var(--primary);
+        }
+        
+        .skill-level {
+            width: 80px;
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 0.5rem 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 0.5rem;
+            outline: none;
+        }
+        
+        .progress-tracker {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+        }
+        
+        .progress-step:not(:last-child)::after {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background-color: var(--gray-300);
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            z-index: 0;
+        }
+        
+        .progress-step.completed:not(:last-child)::after {
+            background-color: var(--primary);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            z-index: 1;
+            position: relative;
+        }
+        
+        .progress-step.completed .step-number {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            text-align: center;
+        }
+        
+        .progress-step.completed .step-label {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .course-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .course-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 0.5rem;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .course-details {
+            flex: 1;
+        }
+        
+        .course-progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background-color: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--secondary);
+        }
+        
+        .views {
+            display: none;
+        }
+        
+        .view.active {
+            display: block;
+        }
+        
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-300);
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        /* User Selector */
+        .user-selector {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            z-index: 100;
+        }
+        
+        .user-selector select {
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid var(--gray-300);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body>
-  <div class="login-container">
-    <div class="login-box">
-      <h1>AI Influencer Manager</h1>
-      <form onsubmit="return login(event)">
-        <input type="text" id="email" placeholder="Email" />
-        <input type="password" id="password" placeholder="Password " />
-        <select id="role" required>
-          <option value="" disabled selected>Select Role</option>
-          <option value="influencer">Influencer</option>
-          <option value="agency">Agency</option>
+    <!-- User Selector (for demo purposes) -->
+    <div class="user-selector">
+        <select id="user-type">
+            <option value="hr-admin">HR Admin</option>
+            <option value="employee">Employee</option>
+            <option value="manager">Manager</option>
         </select>
-        <button type="submit" id="loginBtn" disabled>Login</button>
-        <p class="loading" id="loading-msg">🔄 Redirecting to your dashboard...</p>
-        <p id="error-msg" style="color: #ff5e5e; margin-top: 10px;"></p>
-      </form>
     </div>
-  </div>
 
-  <script>
-    const roleSelect = document.getElementById("role");
-    const loginBtn = document.getElementById("loginBtn");
-    const loadingMsg = document.getElementById("loading-msg");
-    const errorMsg = document.getElementById("error-msg");
-
-    // Enable login button when a role is selected
-    roleSelect.addEventListener("change", () => {
-      loginBtn.disabled = !roleSelect.value;
-    });
-
-    // Load saved role from localStorage
-    window.addEventListener("DOMContentLoaded", () => {
-      const savedRole = localStorage.getItem("selectedRole");
-      if (savedRole) {
-        roleSelect.value = savedRole;
-        loginBtn.disabled = false;
-      }
-    });
-
-    function login(event) {
-      event.preventDefault();
-      const role = roleSelect.value;
-
-      if (!role) {
-        errorMsg.textContent = "Please select a role before logging in.";
-        return;
-      }
-
-      // Save role
-      localStorage.setItem("selectedRole", role);
-
-      // Show loading
-      loadingMsg.style.display = "block";
-      errorMsg.textContent = "";
-
-      // Fake loading delay then redirect
-      setTimeout(() => {
-        window.location.href = `${role}-dashboard.html`;
-      }, 1200);
-    }
-  </script>
-</body>
-</html>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                REDE<span>PLOI</span>
+            </div>
+            
+            <!-- HR Admin Navigation -->
+            <div id="hr-admin-nav">
+                <ul class="nav-links">
+                    <li><a href="#" class="active" data-view="dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="#" data-view="talent-risk"><i class="fas fa-exclamation-triangle"></i> Talent Risk</a></li>
+                    <li><a href="#" data-view="job-matching"><i class="fas fa-exchange-alt"></i> Job Matching</a></li>
+                    <li><a href="#" data-view="skill-gaps"><i class="fas fa-graduation-cap"></i> Skill Gaps</a></li>
+                    <li><a href="#" data-view="progress-tracking"><i class="fas fa-tasks"></i> Progress Tracking</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+            
+            <!-- Employee Navigation -->
+            <div id="employee-nav" style="display: none;">
+                <ul class="nav-links">
+                    <li><a href="#" class="active" data-view="employee-dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#" data-view="job-recommendations"><i class="fas fa-briefcase"></i> Job Recommendations</a></li>
+                    <li><a href="#" data-view="learning-path"><i class="fas fa-road"></i> Learning Path</a></li>
+                    <li><a href="#" data-view="applications"><i class="fas fa-file-alt"></i> My Applications</a></li>
+                    <li><a href="#"><i class="fas fa-user-cog"></i> Profile</a></li>
+                </ul>
+            </div>
+            
+            <!-- Manager Navigation -->
+            <div id="manager-nav" style="display: none;">
+                <ul class="nav-links">
+                    <li><a href="#" class="active" data-view="manager-dashboard"><i class="fas fa-columns"></i> Dashboard</a></li>
+                    <li><a href="#" data-view="team-risk"><i class="fas fa-users"></i> Team Risk</a></li>
+                    <li><a href="#" data-view="approval-requests"><i class="fas fa-check-circle"></i> Approval Requests</a></li>
+                    <li><a href="#" data-view="skill-progress"><i class="fas fa-chart-bar"></i> Skill Progress</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <header class="header">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="user-profile">
+                    <div class="user-avatar">JD</div>
+                    <div>
+                        <div class="user-name">John Doe</div>
+                        <div class="user-role" id="user-role">HR Administrator</div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- HR Admin Views -->
+            <div id="hr-admin-views" class="views">
+                <!-- Dashboard View -->
+                <div id="dashboard" class="view active">
+                    <div class="dashboard-stats">
+                        <div class="stat-card blue">
+                            <h3>45</h3>
+                            <p>At-Risk Employees</p>
+                        </div>
+                        <div class="stat-card green">
+                            <h3>32</h3>
+                            <p>Open Positions</p>
+                        </div>
+                        <div class="stat-card red">
+                            <h3>18</h3>
+                            <p>High Risk Employees</p>
+                        </div>
+                        <div class="stat-card orange">
+                            <h3>85%</h3>
+                            <p>Redeployment Success</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">AI-Based Risk Heat Map</h2>
+                            <button class="btn btn-secondary">View Details</button>
+                        </div>
+                        <div class="heat-map">
+                            <div class="heat-map-cell high-risk">Engineering</div>
+                            <div class="heat-map-cell medium-risk">Marketing</div>
+                            <div class="heat-map-cell low-risk">Sales</div>
+                            <div class="heat-map-cell no-risk">Finance</div>
+                            <div class="heat-map-cell medium-risk">Operations</div>
+                            <div class="heat-map-cell high-risk">Product</div>
+                            <div class="heat-map-cell low-risk">HR</div>
+                            <div class="heat-map-cell no-risk">Legal</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Recently Identified At-Risk Employees</h2>
+                            <button class="btn btn-primary">View All</button>
+                        </div>
+                        <ul class="employee-list">
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">AS</div>
+                                    <div class="employee-details">
+                                        <h4>Alice Smith</h4>
+                                        <p>Senior Developer - Engineering</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-high">High Risk</span>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">BJ</div>
+                                    <div class="employee-details">
+                                        <h4>Bob Johnson</h4>
+                                        <p>Marketing Manager - Marketing</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-medium">Medium Risk</span>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">CW</div>
+                                    <div class="employee-details">
+                                        <h4>Carol Williams</h4>
+                                        <p>Product Designer - Product</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-high">High Risk</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Talent Risk View -->
+                <div id="talent-risk" class="view">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search employees...">
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active">All Employees</div>
+                        <div class="tab">High Risk</div>
+                        <div class="tab">Medium Risk</div>
+                        <div class="tab">Low Risk</div>
+                    </div>
+                    
+                    <div class="card">
+                        <ul class="employee-list">
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">AS</div>
+                                    <div class="employee-details">
+                                        <h4>Alice Smith</h4>
+                                        <p>Senior Developer - Engineering</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-high">High Risk</span>
+                                </div>
+                                <div class="employee-actions">
+                                    <button class="btn btn-primary">View Profile</button>
+                                    <button class="btn btn-secondary">Find Matches</button>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">BJ</div>
+                                    <div class="employee-details">
+                                        <h4>Bob Johnson</h4>
+                                        <p>Marketing Manager - Marketing</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-medium">Medium Risk</span>
+                                </div>
+                                <div class="employee-actions">
+                                    <button class="btn btn-primary">View Profile</button>
+                                    <button class="btn btn-secondary">Find Matches</button>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">CW</div>
+                                    <div class="employee-details">
+                                        <h4>Carol Williams</h4>
+                                        <p>Product Designer - Product</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-high">High Risk</span>
+                                </div>
+                                <div class="employee-actions">
+                                    <button class="btn btn-primary">View Profile</button>
+                                    <button class="btn btn-secondary">Find Matches</button>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">DT</div>
+                                    <div class="employee-details">
+                                        <h4>David Thomas</h4>
+                                        <p>UX Designer - Product</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-low">Low Risk</span>
+                                </div>
+                                <div class="employee-actions">
+                                    <button class="btn btn-primary">View Profile</button>
+                                    <button class="btn btn-secondary">Find Matches</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Job Matching View -->
+                <div id="job-matching" class="view">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Employee Job Matching</h2>
+                        </div>
+                        
+                        <div class="employee-info">
+                            <div class="employee-avatar">AS</div>
+                            <div class="employee-details">
+                                <h4>Alice Smith</h4>
+                                <p>Senior Developer - Engineering</p>
+                                <span class="risk-badge risk-high">High Risk</span>
+                            </div>
+                        </div>
+                        
+                        <div class="job-matches">
+                            <h3>Recommended Job Matches</h3>
+                            
+                            <div class="job-match-card">
+                                <div class="job-match-header">
+                                    <div class="job-match-title">Product Manager</div>
+                                    <div class="match-score">92% Match</div>
+                                </div>
+                                <p>This role requires strong technical knowledge and leadership skills, which Alice possesses. There are some skill gaps in product management methodologies.</p>
+                                <div class="skill-gap-section">
+                                    <h4>Skill Gap Analysis</h4>
+                                    <div class="skill-gap">
+                                        <div class="skill-name">Technical Knowledge</div>
+                                        <div class="skill-progress">
+                                            <div class="skill-progress-bar" style="width: 95%"></div>
+                                        </div>
+                                        <div class="skill-level">Advanced</div>
+                                    </div>
+                                    <div class="skill-gap">
+                                        <div class="skill-name">Product Management</div>
+                                        <div class="skill-progress">
+                                            <div class="skill-progress-bar" style="width: 60%"></div>
+                                        </div>
+                                        <div class="skill-level">Intermediate</div>
+                                    </div>
+                                    <div class="skill-gap">
+                                        <div class="skill-name">Leadership</div>
+                                        <div class="skill-progress">
+                                            <div class="skill-progress-bar" style="width: 85%"></div>
+                                        </div>
+                                        <div class="skill-level">Advanced</div>
+                                    </div>
+                                </div>
