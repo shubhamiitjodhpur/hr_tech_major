@@ -1,13 +1,1801 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>REDEPLO-AI | AI-powered Talent Redeployment</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REDEPLO- AI - Talent Redeployment Platform</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9fafb;
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background-color: var(--gray-900);
+            color: white;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-links a {
+            color: var(--gray-300);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .nav-links a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .nav-links a i {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--gray-900);
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card.blue h3 {
+            color: var(--primary);
+        }
+        
+        .stat-card.green h3 {
+            color: var(--secondary);
+        }
+        
+        .stat-card.red h3 {
+            color: var(--danger);
+        }
+        
+        .stat-card.orange h3 {
+            color: var(--warning);
+        }
+        
+        .stat-card p {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+        
+        .heat-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .heat-map-cell {
+            height: 80px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .heat-map-cell:hover {
+            transform: scale(1.05);
+        }
+        
+        .high-risk {
+            background-color: var(--danger);
+        }
+        
+        .medium-risk {
+            background-color: var(--warning);
+        }
+        
+        .low-risk {
+            background-color: var(--secondary);
+        }
+        
+        .no-risk {
+            background-color: var(--gray-300);
+            color: var(--gray-700);
+        }
+        
+        .employee-list {
+            list-style: none;
+        }
+        
+        .employee-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .employee-item:last-child {
+            border-bottom: none;
+        }
+        
+        .employee-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .employee-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--gray-700);
+        }
+        
+        .employee-details h4 {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .employee-details p {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+        
+        .employee-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--gray-100);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .risk-high {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .risk-medium {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .risk-low {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .job-matches {
+            margin-top: 1rem;
+        }
+        
+        .job-match-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .job-match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .job-match-title {
+            font-weight: bold;
+            color: var(--gray-900);
+        }
+        
+        .match-score {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        
+        .skill-gap-section {
+            margin-top: 1rem;
+        }
+        
+        .skill-gap {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .skill-name {
+            flex: 1;
+            font-size: 0.875rem;
+        }
+        
+        .skill-progress {
+            flex: 2;
+            height: 8px;
+            background-color: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .skill-progress-bar {
+            height: 100%;
+            background-color: var(--primary);
+        }
+        
+        .skill-level {
+            width: 80px;
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 0.5rem 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 0.5rem;
+            outline: none;
+        }
+        
+        .progress-tracker {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+        }
+        
+        .progress-step:not(:last-child)::after {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background-color: var(--gray-300);
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            z-index: 0;
+        }
+        
+        .progress-step.completed:not(:last-child)::after {
+            background-color: var(--primary);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            z-index: 1;
+            position: relative;
+        }
+        
+        .progress-step.completed .step-number {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            text-align: center;
+        }
+        
+        .progress-step.completed .step-label {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .course-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .course-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 0.5rem;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .course-details {
+            flex: 1;
+        }
+        
+        .course-progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background-color: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--secondary);
+        }
+        
+        .views {
+            display: none;
+        }
+        
+        .view.active {
+            display: block;
+        }
+        
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-300);
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        /* User Selector */
+        .user-selector {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            z-index: 100;
+        }
+        
+        .user-selector select {
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid var(--gray-300);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <!-- User Selector (for demo purposes) -->
+    <div class="user-selector">
+        <select id="user-type">
+            <option value="hr-admin">HR Admin</option>
+            <option value="employee">Employee</option>
+            <option value="manager">Manager</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                REDE<span>PLOI</span>
+            </div>
+            
+            <!-- HR Admin Navigation -->
+            <div id="hr-admin-nav">
+                <ul class="nav-links">
+                    <li><a href="#" class="active" data-view="dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="#" data-view="talent-risk"><i class="fas fa-exclamation-triangle"></i> Talent Risk</a></li>
+                    <li><a href="#" data-view="job-matching"><i class="fas fa-exchange-alt"></i> Job Matching</a></li>
+                    <li><a href="#" data-view="skill-gaps"><i class="fas fa-graduation-cap"></i> Skill Gaps</a></li>
+                    <li><a href="#" data-view="progress-tracking"><i class="fas fa-tasks"></i> Progress Tracking</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+            
+            <!-- Employee Navigation -->
+            <div id="employee-nav" style="display: none;">
+                <ul class="nav-links">
+                    <li><a href="#" class="active" data-view="employee-dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#" data-view="job-recommendations"><i class="fas fa-briefcase"></i> Job Recommendations</a></li>
+                    <li><a href="#" data-view="learning-path"><i class="fas fa-road"></i> Learning Path</a></li>
+                    <li><a href="#" data-view="applications"><i class="fas fa-file-alt"></i> My Applications</a></li>
+                    <li><a href="#"><i class="fas fa-user-cog"></i> Profile</a></li>
+                </ul>
+            </div>
+            
+            <!-- Manager Navigation -->
+            <div id="manager-nav" style="display: none;">
+                <ul class="nav-links">
+                    <li><a href="#" class="active" data-view="manager-dashboard"><i class="fas fa-columns"></i> Dashboard</a></li>
+                    <li><a href="#" data-view="team-risk"><i class="fas fa-users"></i> Team Risk</a></li>
+                    <li><a href="#" data-view="approval-requests"><i class="fas fa-check-circle"></i> Approval Requests</a></li>
+                    <li><a href="#" data-view="skill-progress"><i class="fas fa-chart-bar"></i> Skill Progress</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <header class="header">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="user-profile">
+                    <div class="user-avatar">JD</div>
+                    <div>
+                        <div class="user-name">John Doe</div>
+                        <div class="user-role" id="user-role">HR Administrator</div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- HR Admin Views -->
+            <div id="hr-admin-views" class="views">
+                <!-- Dashboard View -->
+                <div id="dashboard" class="view active">
+                    <div class="dashboard-stats">
+                        <div class="stat-card blue">
+                            <h3>45</h3>
+                            <p>At-Risk Employees</p>
+                        </div>
+                        <div class="stat-card green">
+                            <h3>32</h3>
+                            <p>Open Positions</p>
+                        </div>
+                        <div class="stat-card red">
+                            <h3>18</h3>
+                            <p>High Risk Employees</p>
+                        </div>
+                        <div class="stat-card orange">
+                            <h3>85%</h3>
+                            <p>Redeployment Success</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">AI-Based Risk Heat Map</h2>
+                            <button class="btn btn-secondary">View Details</button>
+                        </div>
+                        <div class="heat-map">
+                            <div class="heat-map-cell high-risk">Engineering</div>
+                            <div class="heat-map-cell medium-risk">Marketing</div>
+                            <div class="heat-map-cell low-risk">Sales</div>
+                            <div class="heat-map-cell no-risk">Finance</div>
+                            <div class="heat-map-cell medium-risk">Operations</div>
+                            <div class="heat-map-cell high-risk">Product</div>
+                            <div class="heat-map-cell low-risk">HR</div>
+                            <div class="heat-map-cell no-risk">Legal</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Recently Identified At-Risk Employees</h2>
+                            <button class="btn btn-primary">View All</button>
+                        </div>
+                        <ul class="employee-list">
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">AS</div>
+                                    <div class="employee-details">
+                                        <h4>Alice Smith</h4>
+                                        <p>Senior Developer - Engineering</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-high">High Risk</span>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">BJ</div>
+                                    <div class="employee-details">
+                                        <h4>Bob Johnson</h4>
+                                        <p>Marketing Manager - Marketing</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-medium">Medium Risk</span>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">CW</div>
+                                    <div class="employee-details">
+                                        <h4>Carol Williams</h4>
+                                        <p>Product Designer - Product</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-high">High Risk</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Talent Risk View -->
+                <div id="talent-risk" class="view">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search employees...">
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active">All Employees</div>
+                        <div class="tab">High Risk</div>
+                        <div class="tab">Medium Risk</div>
+                        <div class="tab">Low Risk</div>
+                    </div>
+                    
+                    <div class="card">
+                        <ul class="employee-list">
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">AS</div>
+                                    <div class="employee-details">
+                                        <h4>Alice Smith</h4>
+                                        <p>Senior Developer - Engineering</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-high">High Risk</span>
+                                </div>
+                                <div class="employee-actions">
+                                    <button class="btn btn-primary">View Profile</button>
+                                    <button class="btn btn-secondary">Find Matches</button>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">BJ</div>
+                                    <div class="employee-details">
+                                        <h4>Bob Johnson</h4>
+                                        <p>Marketing Manager - Marketing</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-medium">Medium Risk</span>
+                                </div>
+                                <div class="employee-actions">
+                                    <button class="btn btn-primary">View Profile</button>
+                                    <button class="btn btn-secondary">Find Matches</button>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">CW</div>
+                                    <div class="employee-details">
+                                        <h4>Carol Williams</h4>
+                                        <p>Product Designer - Product</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-high">High Risk</span>
+                                </div>
+                                <div class="employee-actions">
+                                    <button class="btn btn-primary">View Profile</button>
+                                    <button class="btn btn-secondary">Find Matches</button>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">DT</div>
+                                    <div class="employee-details">
+                                        <h4>David Thomas</h4>
+                                        <p>UX Designer - Product</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-low">Low Risk</span>
+                                </div>
+                                <div class="employee-actions">
+                                    <button class="btn btn-primary">View Profile</button>
+                                    <button class="btn btn-secondary">Find Matches</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Job Matching View -->
+                <div id="job-matching" class="view">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Employee Job Matching</h2>
+                        </div>
+                        
+                        <div class="employee-info">
+                            <div class="employee-avatar">AS</div>
+                            <div class="employee-details">
+                                <h4>Alice Smith</h4>
+                                <p>Senior Developer - Engineering</p>
+                                <span class="risk-badge risk-high">High Risk</span>
+                            </div>
+                        </div>
+                        
+                        <div class="job-matches">
+                            <h3>Recommended Job Matches</h3>
+                            
+                            <div class="job-match-card">
+                                <div class="job-match-header">
+                                    <div class="job-match-title">Product Manager</div>
+                                    <div class="match-score">92% Match</div>
+                                </div>
+                                <p>This role requires strong technical knowledge and leadership skills, which Alice possesses. There are some skill gaps in product management methodologies.</p>
+                                <div class="skill-gap-section">
+                                    <h4>Skill Gap Analysis</h4>
+                                    <div class="skill-gap">
+                                        <div class="skill-name">Technical Knowledge</div>
+                                        <div class="skill-progress">
+                                            <div class="skill-progress-bar" style="width: 95%"></div>
+                                        </div>
+                                        <div class="skill-level">Advanced</div>
+                                    </div>
+                                    <div class="skill-gap">
+                                        <div class="skill-name">Product Management</div>
+                                        <div class="skill-progress">
+                                            <div class="skill-progress-bar" style="width: 60%"></div>
+                                        </div>
+                                        <div class="skill-level">Intermediate</div>
+                                    </div>
+                                    <div class="skill-gap">
+                                        <div class="skill-name">Leadership</div>
+                                        <div class="skill-progress">
+                                            <div class="skill-progress-bar" style="width: 85%"></div>
+                                        </div>
+                                        <div class="skill-level">Advanced</div>
+                                    </div>
+                                </div>
+
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-primary">Initiate Match</button>
+                                    <button class="btn btn-secondary">Suggest Training</button>
+                                </div>
+                            </div>
+                            
+                            <div class="job-match-card">
+                                <div class="job-match-header">
+                                    <div class="job-match-title">Technical Project Manager</div>
+                                    <div class="match-score">87% Match</div>
+                                </div>
+                                <p>Alice's technical expertise and problem-solving skills make her a good fit for this role. Some project management methodology training would be beneficial.</p>
+                                <div class="skill-gap-section">
+                                    <h4>Skill Gap Analysis</h4>
+                                    <div class="skill-gap">
+                                        <div class="skill-name">Technical Knowledge</div>
+                                        <div class="skill-progress">
+                                            <div class="skill-progress-bar" style="width: 90%"></div>
+                                        </div>
+                                        <div class="skill-level">Advanced</div>
+                                    </div>
+                                    <div class="skill-gap">
+                                        <div class="skill-name">Project Management</div>
+                                        <div class="skill-progress">
+                                            <div class="skill-progress-bar" style="width: 70%"></div>
+                                        </div>
+                                        <div class="skill-level">Intermediate</div>
+                                    </div>
+                                    <div class="skill-gap">
+                                        <div class="skill-name">Communication</div>
+                                        <div class="skill-progress">
+                                            <div class="skill-progress-bar" style="width: 80%"></div>
+                                        </div>
+                                        <div class="skill-level">Advanced</div>
+                                    </div>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-primary">Initiate Match</button>
+                                    <button class="btn btn-secondary">Suggest Training</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Skill Gaps View -->
+                <div id="skill-gaps" class="view">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search employees or skills...">
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Skill Gap Analysis</h2>
+                        </div>
+                        
+                        <div class="employee-info">
+                            <div class="employee-avatar">AS</div>
+                            <div class="employee-details">
+                                <h4>Alice Smith</h4>
+                                <p>Senior Developer - Engineering</p>
+                                <span class="risk-badge risk-high">High Risk</span>
+                            </div>
+                        </div>
+                        
+                        <div class="tabs">
+                            <div class="tab active">Current Skills</div>
+                            <div class="tab">Required Skills</div>
+                            <div class="tab">Learning Path</div>
+                        </div>
+                        
+                        <div class="tab-content active">
+                            <div class="skill-gap-section">
+                                <h4>Technical Skills</h4>
+                                <div class="skill-gap">
+                                    <div class="skill-name">JavaScript</div>
+                                    <div class="skill-progress">
+                                        <div class="skill-progress-bar" style="width: 95%"></div>
+                                    </div>
+                                    <div class="skill-level">Advanced</div>
+                                </div>
+                                <div class="skill-gap">
+                                    <div class="skill-name">React</div>
+                                    <div class="skill-progress">
+                                        <div class="skill-progress-bar" style="width: 90%"></div>
+                                    </div>
+                                    <div class="skill-level">Advanced</div>
+                                </div>
+                                <div class="skill-gap">
+                                    <div class="skill-name">Node.js</div>
+                                    <div class="skill-progress">
+                                        <div class="skill-progress-bar" style="width: 85%"></div>
+                                    </div>
+                                    <div class="skill-level">Advanced</div>
+                                </div>
+                                
+                                <h4>Soft Skills</h4>
+                                <div class="skill-gap">
+                                    <div class="skill-name">Leadership</div>
+                                    <div class="skill-progress">
+                                        <div class="skill-progress-bar" style="width: 80%"></div>
+                                    </div>
+                                    <div class="skill-level">Advanced</div>
+                                </div>
+                                <div class="skill-gap">
+                                    <div class="skill-name">Communication</div>
+                                    <div class="skill-progress">
+                                        <div class="skill-progress-bar" style="width: 75%"></div>
+                                    </div>
+                                    <div class="skill-level">Intermediate</div>
+                                </div>
+                                <div class="skill-gap">
+                                    <div class="skill-name">Problem Solving</div>
+                                    <div class="skill-progress">
+                                        <div class="skill-progress-bar" style="width: 90%"></div>
+                                    </div>
+                                    <div class="skill-level">Advanced</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress Tracking View -->
+                <div id="progress-tracking" class="view">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Redeployment Progress</h2>
+                            <div class="filters">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Show only at-risk employees</span>
+                            </div>
+                        </div>
+                        
+                        <ul class="employee-list">
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">AS</div>
+                                    <div class="employee-details">
+                                        <h4>Alice Smith</h4>
+                                        <p>Senior Developer → Product Manager</p>
+                                    </div>
+                                </div>
+                                <div class="progress-tracker">
+                                    <div class="progress-step completed">
+                                        <div class="step-number">1</div>
+                                        <div class="step-label">Identified</div>
+                                    </div>
+                                    <div class="progress-step completed">
+                                        <div class="step-number">2</div>
+                                        <div class="step-label">Matched</div>
+                                    </div>
+                                    <div class="progress-step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-label">Training</div>
+                                    </div>
+                                    <div class="progress-step">
+                                        <div class="step-number">4</div>
+                                        <div class="step-label">Approval</div>
+                                    </div>
+                                    <div class="progress-step">
+                                        <div class="step-number">5</div>
+                                        <div class="step-label">Completed</div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">BJ</div>
+                                    <div class="employee-details">
+                                        <h4>Bob Johnson</h4>
+                                        <p>Marketing Manager → Sales Director</p>
+                                    </div>
+                                </div>
+                                <div class="progress-tracker">
+                                    <div class="progress-step completed">
+                                        <div class="step-number">1</div>
+                                        <div class="step-label">Identified</div>
+                                    </div>
+                                    <div class="progress-step completed">
+                                        <div class="step-number">2</div>
+                                        <div class="step-label">Matched</div>
+                                    </div>
+                                    <div class="progress-step completed">
+                                        <div class="step-number">3</div>
+                                        <div class="step-label">Training</div>
+                                    </div>
+                                    <div class="progress-step">
+                                        <div class="step-number">4</div>
+                                        <div class="step-label">Approval</div>
+                                    </div>
+                                    <div class="progress-step">
+                                        <div class="step-number">5</div>
+                                        <div class="step-label">Completed</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Employee Views -->
+            <div id="employee-views" class="views" style="display: none;">
+                <!-- Employee Dashboard View -->
+                <div id="employee-dashboard" class="view active">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Welcome Back, John!</h2>
+                        </div>
+                        <p>Your department is undergoing restructuring. We've identified new opportunities that match your skills and experience.</p>
+                        <div class="dashboard-stats">
+                            <div class="stat-card blue">
+                                <h3>3</h3>
+                                <p>Job Matches</p>
+                            </div>
+                            <div class="stat-card green">
+                                <h3>2</h3>
+                                <p>Learning Paths</p>
+                            </div>
+                            <div class="stat-card orange">
+                                <h3>75%</h3>
+                                <p>Current Match Score</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Skill Development Progress</h2>
+                        </div>
+                        <div class="course-card">
+                            <div class="course-icon">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <div class="course-details">
+                                <h3>Product Management Fundamentals</h3>
+                                <p>Required for Product Manager role transition</p>
+                                <div class="course-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 60%"></div>
+                                    </div>
+                                    <span>60% Complete</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">Continue</button>
+                        </div>
+                        <div class="course-card">
+                            <div class="course-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="course-details">
+                                <h3>Agile Project Management</h3>
+                                <p>Required for Technical Project Manager role transition</p>
+                                <div class="course-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 30%"></div>
+                                    </div>
+                                    <span>30% Complete</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">Continue</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Job Recommendations View -->
+                <div id="job-recommendations" class="view">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Your Recommended Job Matches</h2>
+                        </div>
+                        
+                        <div class="job-match-card">
+                            <div class="job-match-header">
+                                <div class="job-match-title">Product Manager</div>
+                                <div class="match-score">92% Match</div>
+                            </div>
+                            <p>Based on your technical expertise and leadership skills, you're an excellent fit for this Product Manager role. Some additional training in product management methodologies would help you excel in this position.</p>
+                            <div class="skill-gap-section">
+                                <h4>Why This Match?</h4>
+                                <ul>
+                                    <li>Your strong technical background is valuable for understanding product requirements</li>
+                                    <li>Your leadership experience will help in managing cross-functional teams</li>
+                                    <li>Your problem-solving abilities align with product strategy needs</li>
+                                </ul>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary">Apply Now</button>
+                                <button class="btn btn-secondary">View Learning Path</button>
+                            </div>
+                        </div>
+                        
+                        <div class="job-match-card">
+                            <div class="job-match-header">
+                                <div class="job-match-title">Technical Project Manager</div>
+                                <div class="match-score">87% Match</div>
+                            </div>
+                            <p>Your technical expertise and problem-solving skills make you a strong candidate for this role. Additional training in project management methodologies would enhance your qualifications.</p>
+                            <div class="skill-gap-section">
+                                <h4>Why This Match?</h4>
+                                <ul>
+                                    <li>Your deep technical knowledge helps in understanding project requirements</li>
+                                    <li>Your communication skills will facilitate team coordination</li>
+                                    <li>Your ability to solve complex problems is crucial for project success</li>
+                                </ul>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary">Apply Now</button>
+                                <button class="btn btn-secondary">View Learning Path</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Learning Path View -->
+                <div id="learning-path" class="view">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Your Learning Path: Product Manager</h2>
+                        </div>
+                        
+                        <div class="progress-tracker">
+                            <div class="progress-step completed">
+                                <div class="step-number">1</div>
+                                <div class="step-label">Assessment</div>
+                            </div>
+                            <div class="progress-step completed">
+                                <div class="step-number">2</div>
+                                <div class="step-label">Path Created</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-number">3</div>
+                                <div class="step-label">In Progress</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-number">4</div>
+                                <div class="step-label">Completed</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-number">5</div>
+                                <div class="step-label">Certification</div>
+                            </div>
+                        </div>
+                        
+                        <div class="course-card">
+                            <div class="course-icon">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <div class="course-details">
+                                <h3>Product Management Fundamentals</h3>
+                                <p>Learn the basics of product management, including product lifecycle, strategy, and roadmapping</p>
+                                <div class="course-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 60%"></div>
+                                    </div>
+                                    <span>60% Complete</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">Continue</button>
+                        </div>
+                        
+                        <div class="course-card">
+                            <div class="course-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="course-details">
+                                <h3>Stakeholder Management</h3>
+                                <p>Learn how to effectively work with different stakeholders in product development</p>
+                                <div class="course-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 25%"></div>
+                                    </div>
+                                    <span>25% Complete</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">Continue</button>
+                        </div>
+                        
+                        <div class="course-card">
+                            <div class="course-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="course-details">
+                                <h3>Product Analytics</h3>
+                                <p>Learn how to use data to make product decisions and measure success</p>
+                                <div class="course-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 0%"></div>
+                                    </div>
+                                    <span>Not Started</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary">Start Course</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Applications View -->
+                <div id="applications" class="view">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Your Job Applications</h2>
+                        </div>
+                        
+                        <div class="tabs">
+                            <div class="tab active">In Progress</div>
+                            <div class="tab">Accepted</div>
+                            <div class="tab">Rejected</div>
+                        </div>
+                        
+                        <div class="job-match-card">
+                            <div class="job-match-header">
+                                <div class="job-match-title">Product Manager</div>
+                                <div class="match-score">Under Review</div>
+                            </div>
+                            <p>Application submitted on April 15, 2025</p>
+                            <div class="progress-tracker">
+                                <div class="progress-step completed">
+                                    <div class="step-number">1</div>
+                                    <div class="step-label">Applied</div>
+                                </div>
+                                <div class="progress-step completed">
+                                    <div class="step-number">2</div>
+                                    <div class="step-label">HR Review</div>
+                                </div>
+                                <div class="progress-step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-label">Manager Review</div>
+                                </div>
+                                <div class="progress-step">
+                                    <div class="step-number">4</div>
+                                    <div class="step-label">Decision</div>
+                                </div>
+                                <div class="progress-step">
+                                    <div class="step-number">5</div>
+                                    <div class="step-label">Onboarding</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Manager Views -->
+            <div id="manager-views" class="views" style="display: none;">
+                <!-- Manager Dashboard View -->
+                <div id="manager-dashboard" class="view active">
+                    <div class="dashboard-stats">
+                        <div class="stat-card blue">
+                            <h3>5</h3>
+                            <p>Team Members at Risk</p>
+                        </div>
+                        <div class="stat-card green">
+                            <h3>3</h3>
+                            <p>Open Positions</p>
+                        </div>
+                        <div class="stat-card orange">
+                            <h3>4</h3>
+                            <p>Approval Requests</p>
+                        </div>
+                        <div class="stat-card red">
+                            <h3>2</h3>
+                            <p>Urgent Attention</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Team Risk Overview</h2>
+                        </div>
+                        <div class="heat-map">
+                            <div class="heat-map-cell high-risk">Frontend Dev</div>
+                            <div class="heat-map-cell medium-risk">Backend Dev</div>
+                            <div class="heat-map-cell low-risk">DevOps</div>
+                            <div class="heat-map-cell no-risk">QA</div>
+                            <div class="heat-map-cell high-risk">Mobile Dev</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Pending Approval Requests</h2>
+                            <button class="btn btn-primary">View All</button>
+                        </div>
+                        <ul class="employee-list">
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">AS</div>
+                                    <div class="employee-details">
+                                        <h4>Alice Smith</h4>
+                                        <p>Senior Developer → Product Manager</p>
+                                    </div>
+                                </div>
+                                <div class="employee-actions">
+                                    <button class="btn btn-primary">Review</button>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">BJ</div>
+                                    <div class="employee-details">
+                                        <h4>Bob Johnson</h4>
+                                        <p>Marketing Manager → Sales Director</p>
+                                    </div>
+                                </div>
+                                <div class="employee-actions">
+                                    <button class="btn btn-primary">Review</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Team Risk View -->
+                <div id="team-risk" class="view">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search team members...">
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Team Risk Analysis</h2>
+                        </div>
+                        
+                        <ul class="employee-list">
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">AS</div>
+                                    <div class="employee-details">
+                                        <h4>Alice Smith</h4>
+                                        <p>Senior Developer - Engineering</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-high">High Risk</span>
+                                </div>
+                                <div class="employee-actions">
+                                    <button class="btn btn-primary">View Profile</button>
+                                    <button class="btn btn-secondary">Review Matches</button>
+                                </div>
+                            </li>
+                            <li class="employee-item">
+                                <div class="employee-info">
+                                    <div class="employee-avatar">DT</div>
+                                    <div class="employee-details">
+                                        <h4>David Thomas</h4>
+                                        <p>UX Designer - Product</p>
+                                    </div>
+                                </div>
+                                <div class="employee-risk">
+                                    <span class="risk-badge risk-low">Low Risk</span>
+                                </div>
+                                <div class="employee-actions">
+                                    <button class="btn btn-primary">View Profile</button>
+                                    <button class="btn btn-secondary">Review Matches</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Approval Requests View -->
+                <div id="approval-requests" class="view">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Pending Approval Requests</h2>
+                        </div>
+                        
+                        <div class="job-match-card">
+                            <div class="job-match-header">
+                                <div class="job-match-title">Alice Smith - Product Manager Application</div>
+                            </div>
+                            <div class="employee-info">
+                                <div class="employee-avatar">AS</div>
+                                <div class="employee-details">
+                                    <h4>Alice Smith</h4>
+                                    <p>Senior Developer - Engineering</p>
+                                    <span class="risk-badge risk-high">High Risk</span>
+                                </div>
+                            </div>
+                            <div class="skill-gap-section">
+                                <h4>Skill Assessment</h4>
+                                <div class="skill-gap">
+                                    <div class="skill-name">Technical Knowledge</div>
+                                    <div class="skill-progress">
+                                        <div class="skill-progress-bar" style="width: 95%"></div>
+                                    </div>
+                                    <div class="skill-level">Advanced</div>
+                                </div>
+                                <div class="skill-gap">
+                                    <div class="skill-name">Product Management</div>
+                                    <div class="skill-progress">
+                                        <div class="skill-progress-bar" style="width: 60%"></div>
+                                    </div>
+                                    <div class="skill-level">Intermediate</div>
+                                </div>
+                                <div class="skill-gap">
+                                    <div class="skill-name">Leadership</div>
+                                    <div class="skill-progress">
+                                        <div class="skill-progress-bar" style="width: 85%"></div>
+                                    </div>
+                                    <div class="skill-level">Advanced</div>
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary">Approve</button>
+                                <button class="btn btn-secondary">Request More Training</button>
+                                <button class="btn btn-danger">Decline</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Skill Progress View -->
+                <div id="skill-progress" class="view">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search employees...">
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Team Skill Development</h2>
+                        </div>
+                        
+                        <div class="employee-info">
+                            <div class="employee-avatar">AS</div>
+                            <div class="employee-details">
+                                <h4>Alice Smith</h4>
+                                <p>Senior Developer → Product Manager</p>
+                            </div>
+                        </div>
+                        
+                        <div class="course-card">
+                            <div class="course-icon">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <div class="course-details">
+                                <h3>Product Management Fundamentals</h3>
+                                <p>Required for Product Manager role transition</p>
+                                <div class="course-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 60%"></div>
+                                    </div>
+                                    <span>60% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="course-card">
+                            <div class="course-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="course-details">
+                                <h3>Stakeholder Management</h3>
+                                <p>Learn how to effectively work with different stakeholders</p>
+                                <div class="course-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 25%"></div>
+                                    </div>
+                                    <span>25% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Toggle between user types
+        document.getElementById('user-type').addEventListener('change', function() {
+            const userType = this.value;
+            
+            // Hide all views
+            document.getElementById('hr-admin-views').style.display = 'none';
+            document.getElementById('employee-views').style.display = 'none';
+            document.getElementById('manager-views').style.display = 'none';
+            
+            // Hide all navigation
+            document.getElementById('hr-admin-nav').style.display = 'none';
+            document.getElementById('employee-nav').style.display = 'none';
+            document.getElementById('manager-nav').style.display = 'none';
+            
+            // Show selected user type views and navigation
+            document.getElementById(userType + '-views').style.display = 'block';
+            document.getElementById(userType + '-nav').style.display = 'block';
+            
+            // Update user role display
+            const userRoleMapping = {
+                'hr-admin': 'HR Administrator',
+                'employee': 'Software Developer',
+                'manager': 'Engineering Manager'
+            };
+            
+            document.getElementById('user-role').textContent = userRoleMapping[userType];
+            
+            // Reset active view
+            const activeView = document.querySelector('#' + userType + '-views .view.active');
+            document.getElementById('page-title').textContent = activeView.id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        });
+        
+        // Navigation click handler
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.nav-item')) {
+    // Only process navigation items
+    if (e.target && e.target.closest('.nav-item')) {
+        // Get current active user type
+        let activeUserType = '';
+        ['hr-admin', 'employee', 'manager'].forEach(type => {
+            if (document.getElementById(type + '-views').style.display === 'block') {
+                activeUserType = type;
+            }
+        });
+        
+        // Get the view ID from the data-view attribute
+        const viewId = e.target.closest('.nav-item').dataset.view;
+        
+        // Hide all views for current user type
+        const views = document.querySelectorAll('#' + activeUserType + '-views .view');
+        views.forEach(view => view.classList.remove('active'));
+        
+        // Show the selected view
+        document.getElementById(viewId).classList.add('active');
+        
+        // Update the page title
+        document.getElementById('page-title').textContent = viewId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        
+        // Update active nav item
+        const navItems = document.querySelectorAll('#' + activeUserType + '-nav .nav-item');
+        navItems.forEach(item => item.classList.remove('active'));
+        e.target.closest('.nav-item').classList.add('active');
+    }
+});
+
+// Tab switching functionality
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.classList.contains('tab')) {
+        const tabs = e.target.parentElement.querySelectorAll('.tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        // If there are tab content panels, switch those too
+        const tabContents = e.target.closest('.card').querySelectorAll('.tab-content');
+        if (tabContents.length > 0) {
+            tabContents.forEach(content => content.classList.remove('active'));
+            // Find the index of the clicked tab
+            const tabIndex = Array.from(tabs).indexOf(e.target);
+            // Activate the corresponding tab content
+            if (tabContents[tabIndex]) {
+                tabContents[tabIndex].classList.add('active');
+            }
+        }
+    }
+});
+
+// Search functionality
+document.querySelectorAll('.search-bar input').forEach(searchInput => {
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const parentView = this.closest('.view');
+        
+        // Search through employee items
+        const employeeItems = parentView.querySelectorAll('.employee-item');
+        if (employeeItems.length) {
+            employeeItems.forEach(item => {
+                const employeeName = item.querySelector('.employee-details h4').textContent.toLowerCase();
+                const employeeRole = item.querySelector('.employee-details p').textContent.toLowerCase();
+                
+                if (employeeName.includes(searchTerm) || employeeRole.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        // Search through job match cards
+        const jobCards = parentView.querySelectorAll('.job-match-card');
+        if (jobCards.length) {
+            jobCards.forEach(card => {
+                const jobTitle = card.querySelector('.job-match-title').textContent.toLowerCase();
+                const jobDescription = card.querySelector('p').textContent.toLowerCase();
+                
+                if (jobTitle.includes(searchTerm) || jobDescription.includes(searchTerm)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    });
+});
+
+// Button actions
+document.addEventListener('click', function(e) {
+    // Apply Now / Initiate Match buttons
+    if (e.target && e.target.classList.contains('btn-primary')) {
+        const buttonText = e.target.textContent.trim();
+        
+        if (buttonText === 'Apply Now' || buttonText === 'Initiate Match') {
+            // Get job title
+            let jobTitle = '';
+            const jobCard = e.target.closest('.job-match-card');
+            if (jobCard) {
+                jobTitle = jobCard.querySelector('.job-match-title').textContent;
+                
+                // Show confirmation message
+                alert(`Application submitted for ${jobTitle} position. HR will review your application soon.`);
+                
+                // In a real app, this would send data to the server
+            }
+        }
+        
+        // Approve button for managers
+        if (buttonText === 'Approve') {
+            alert('Application approved. The employee will be notified of your decision.');
+        }
+        
+        // Review button for managers
+        if (buttonText === 'Review') {
+            // Navigate to approval requests view
+            const managerViews = document.querySelectorAll('#manager-views .view');
+            managerViews.forEach(view => view.classList.remove('active'));
+            document.getElementById('approval-requests').classList.add('active');
+            
+            // Update page title
+            document.getElementById('page-title').textContent = 'Approval Requests';
+            
+            // Update active nav item
+            const navItems = document.querySelectorAll('#manager-nav .nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            document.querySelector('#manager-nav [data-view="approval-requests"]').classList.add('active');
+        }
+    }
+    
+    // View Learning Path buttons
+    if (e.target && e.target.classList.contains('btn-secondary')) {
+        const buttonText = e.target.textContent.trim();
+        
+        if (buttonText === 'View Learning Path') {
+            // Navigate to learning path view
+            const employeeViews = document.querySelectorAll('#employee-views .view');
+            employeeViews.forEach(view => view.classList.remove('active'));
+            document.getElementById('learning-path').classList.add('active');
+            
+            // Update page title
+            document.getElementById('page-title').textContent = 'Learning Path';
+            
+            // Update active nav item
+            const navItems = document.querySelectorAll('#employee-nav .nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            document.querySelector('#employee-nav [data-view="learning-path"]').classList.add('active');
+        }
+        
+        if (buttonText === 'Request More Training') {
+            alert('Additional training requested. The employee will be notified to complete more courses before approval.');
+        }
+        
+        if (buttonText === 'Suggest Training') {
+            alert('Training suggestions will be sent to the employee to help improve their match score.');
+        }
+    }
+    
+    // Decline button for managers
+    if (e.target && e.target.classList.contains('btn-danger')) {
+        if (e.target.textContent.trim() === 'Decline') {
+            alert('Application declined. The employee will be notified and recommended alternative positions.');
+        }
+    }
+});
+
+// Initialize the application with HR Admin view
+document.getElementById('user-type').dispatchEvent(new Event('change'));
+
+
+                                 
